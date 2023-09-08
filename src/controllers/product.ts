@@ -1,28 +1,40 @@
 import { Request, Response } from "express";
 // Error handle
 import { handleHttp } from "../utils/error.handle";
+import {
+  insertProduct,
+  obteinProducts,
+  obteinProduct,
+} from "../services/product.service";
 
 // GET
-const getProduct = (req: Request, res: Response) => {
+const getProduct = async ({ params }: Request, res: Response) => {
   try {
+    const { id } = params;
+    const response = await obteinProduct(id);
+    res.status(200).send(response);
   } catch (error) {
     handleHttp(res, "Error get product");
   }
 };
 
-const getProducts = (req: Request, res: Response) => {
+const getProducts = async (req: Request, res: Response) => {
   try {
+    const response = await obteinProducts();
+    res.status(200).send(response);
   } catch (error) {
     handleHttp(res, "Error get products");
   }
 };
 
 // POST
-const postProduct = ({ body }: Request, res: Response) => {
+const postProduct = async ({ body }: Request, res: Response) => {
   try {
-    res.send(body);
+    const response = await insertProduct(body);
+    res.status(201).send(response);
   } catch (error) {
-    handleHttp(res, "Error post product");
+    console.log(error);
+    handleHttp(res, "Error post product", error);
   }
 };
 
