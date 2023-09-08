@@ -2,8 +2,8 @@ import { Router } from "express";
 
 const router = Router();
 
-router.get('/', (req, res) => {
-    res.send({data:'All records'});
+router.get("/records", (req, res) => {
+  res.send({ data: "All records" });
 });
 
-export default router;
+export { router };
