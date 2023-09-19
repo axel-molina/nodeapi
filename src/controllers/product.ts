@@ -5,6 +5,8 @@ import {
   insertProduct,
   obteinProducts,
   obteinProduct,
+  actualizeProduct,
+  removeProduct,
 } from "../services/product.service";
 
 // GET
@@ -12,7 +14,8 @@ const getProduct = async ({ params }: Request, res: Response) => {
   try {
     const { id } = params;
     const response = await obteinProduct(id);
-    res.status(200).send(response);
+    const data = response ? response : "Product not found";
+    res.status(200).send(data);
   } catch (error) {
     handleHttp(res, "Error get product");
   }
@@ -21,7 +24,7 @@ const getProduct = async ({ params }: Request, res: Response) => {
 const getProducts = async (req: Request, res: Response) => {
   try {
     const response = await obteinProducts();
-    res.status(200).send(response);
+    res.status(200).send({ data: response });
   } catch (error) {
     handleHttp(res, "Error get products");
   }
@@ -39,18 +42,25 @@ const postProduct = async ({ body }: Request, res: Response) => {
 };
 
 // PUT
-const updateProduct = (req: Request, res: Response) => {
+const updateProduct = async (req: Request, res: Response) => {
   try {
+    const id = req.params.id;
+    const body = req.body;
+    const response = await actualizeProduct(id, body);
+    res.status(200).send(response);
   } catch (error) {
-    handleHttp(res, "Error update product");
+    handleHttp(res, "Error update product", error);
   }
 };
 
 // DELETE
-const deleteProduct = (req: Request, res: Response) => {
+const deleteProduct = async (req: Request, res: Response) => {
   try {
+    const id = req.params.id;
+    const response = await removeProduct(id);
+    res.status(200).send(response);
   } catch (error) {
-    handleHttp(res, "Error delete product");
+    handleHttp(res, "Error delete product", error);
   }
 };
 
