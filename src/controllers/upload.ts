@@ -8,6 +8,14 @@ import { handleHttp } from "../utils/error.handle";
 const getFile = async (req: RequestExt, res: Response) => {
   try {
     const { user, file } = req;
+    // Validar tamaño de archivo
+    if (file?.size && file.size > 3500000) {
+      return res.status(400).send("File is too large");
+    }
+    // Validar tipo de archivo
+    if (!file?.mimetype.includes("image")) {
+      return res.status(400).send("File is not image");
+    }
     const dataToRegister: Storage = {
       fileName: `${file?.filename}`,
       idUser: `${user?.id}`,
