@@ -8,6 +8,11 @@ import {
   actualizeProduct,
   removeProduct,
 } from "../services/product.service";
+import { verifyToken } from "../utils/jwt.handle";
+
+interface JwtPayload {
+  id: string;
+}
 
 // GET
 const getProduct = async ({ params }: Request, res: Response) => {
@@ -22,8 +27,10 @@ const getProduct = async ({ params }: Request, res: Response) => {
 };
 
 const getProducts = async (req: Request, res: Response) => {
+  const token = req.headers.authorization?.split(" ")[1];
+  const dataJwt = verifyToken(token || "");
   try {
-    const response = await obteinProducts();
+    const response = await obteinProducts(dataJwt);
     res.status(200).send({ data: response });
   } catch (error) {
     handleHttp(res, "Error get products");

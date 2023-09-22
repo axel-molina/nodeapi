@@ -19,7 +19,7 @@ router.get("/", checkJwt, getProducts);
 router.get("/:id", logMiddleware, getProduct);
 
 // POST
-router.post("/", postProduct);
+router.post("/", checkJwt, postProduct);
 
 // PUT
 router.put("/:id", updateProduct);

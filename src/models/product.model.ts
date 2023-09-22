@@ -22,6 +22,11 @@ const ProductSchema = new Schema<Product>(
       type: String,
       trim: true,
     },
+    userId: {
+      type: String,
+      ref: "Users",
+      required: true,
+    },
   },
   {
     timestamps: true,

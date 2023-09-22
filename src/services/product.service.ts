@@ -7,8 +7,8 @@ const insertProduct = async (product: Product) => {
   return responseInsert;
 };
 
-const obteinProducts = async () => {
-  const responseProducts = await ProductModel.find({});
+const obteinProducts = async (jwtData: any) => {
+  const responseProducts = await ProductModel.find({ userId: jwtData.id });
   return responseProducts;
 };
 
