@@ -3,10 +3,11 @@ import { Request, Response } from "express";
 import { handleHttp } from "../utils/error.handle";
 import {
   insertProduct,
-  obteinProducts,
   obteinProduct,
-  actualizeProduct,
   removeProduct,
+  obteinProducts,
+  actualizeProduct,
+  obteinProductsForPage,
 } from "../services/product.service";
 import { verifyToken } from "../utils/jwt.handle";
 
@@ -34,6 +35,23 @@ const getProducts = async (req: Request, res: Response) => {
     res.status(200).send({ data: response });
   } catch (error) {
     handleHttp(res, "Error get products");
+  }
+};
+
+const getProductsForPage = async (req: Request, res: Response) => {
+  const { page, limit, search } = req.query;
+  const token = req.headers.authorization?.split(" ")[1];
+  const dataJwt = verifyToken(token || "");
+  try {
+    const response = await obteinProductsForPage(
+      Number(page),
+      Number(limit),
+      search?.toString() || "",
+      dataJwt
+    );
+    res.status(200).send({ data: response });
+  } catch (error) {
+    handleHttp(res, "Error get products for page");
   }
 };
 
@@ -71,4 +89,11 @@ const deleteProduct = async (req: Request, res: Response) => {
   }
 };
 
-export { getProduct, getProducts, postProduct, updateProduct, deleteProduct };
+export {
+  getProduct,
+  getProducts,
+  postProduct,
+  updateProduct,
+  deleteProduct,
+  getProductsForPage,
+};

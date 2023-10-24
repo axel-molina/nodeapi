@@ -7,6 +7,21 @@ const insertProduct = async (product: Product) => {
   return responseInsert;
 };
 
+const obteinProductsForPage = async (
+  page: number,
+  limit: number,
+  search: string,
+  jwtData: any
+) => {
+  const responseProductsForPage = await ProductModel.find({
+    userId: jwtData.id,
+    name: { $regex: search, $options: "i" },
+  })
+    .skip((page - 1) * limit)
+    .limit(limit);
+  return responseProductsForPage;
+};
+
 const obteinProducts = async (jwtData: any) => {
   const responseProducts = await ProductModel.find({ userId: jwtData.id });
   return responseProducts;
@@ -33,8 +48,9 @@ const removeProduct = async (id: string) => {
 
 export {
   insertProduct,
-  obteinProducts,
   obteinProduct,
-  actualizeProduct,
   removeProduct,
+  obteinProducts,
+  actualizeProduct,
+  obteinProductsForPage,
 };

@@ -1,6 +1,7 @@
 import { Router } from "express";
 import {
   getProduct,
+  getProductsForPage,
   getProducts,
   postProduct,
   updateProduct,
@@ -16,15 +17,16 @@ const router = Router();
 
 // GET
 router.get("/", checkJwt, getProducts);
+router.get("/paginated", checkJwt, getProductsForPage);
 router.get("/:id", logMiddleware, getProduct);
 
 // POST
 router.post("/", checkJwt, postProduct);
 
 // PUT
-router.put("/:id", updateProduct);
+router.put("/:id", checkJwt, updateProduct);
 
 // DELETE
-router.delete("/:id", deleteProduct);
+router.delete("/:id", checkJwt, deleteProduct);
 
 export { router };
