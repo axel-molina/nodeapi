@@ -19,7 +19,18 @@ const obteinProductsForPage = async (
   })
     .skip((page - 1) * limit)
     .limit(limit);
-  return responseProductsForPage;
+  const totalProducts = await ProductModel.countDocuments({
+    userId: jwtData.id,
+    name: { $regex: search, $options: "i" },
+  });
+  return {
+    pagination: {
+      page: page,
+      limit: limit,
+      totalProducts: totalProducts,
+    },
+    products: responseProductsForPage,
+  };
 };
 
 const obteinProducts = async (jwtData: any) => {
